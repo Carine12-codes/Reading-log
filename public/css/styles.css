@@ -1,0 +1,32 @@
+.book-card {
+  display: flex;
+  gap: 15px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  
+  /* FIX 1: Keeps buttons and content vertically centered and stops the vertical stretching */
+  align-items: center; 
+}
+
+/* FIX 2: Prevents any inline button/form container from acting weird inside the flex row */
+.book-card button, 
+.book-card form {
+  margin: 0;
+  box-shadow: none;
+  padding: 0;
+  background: transparent;
+}
+
+/* FIX 3: Style the buttons cleanly within the cards */
+.book-card button,
+.book-card .edit-btn { /* Add an edit class if it's an anchor tag */
+  padding: 8px 14px;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap; /* Keeps the text on one line */
+}

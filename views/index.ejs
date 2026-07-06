@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Books I've Read</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  
+</head>
+<body>
+
+  <h1>Books I've Read</h1>
+
+  <!--Add a form to add a new book and its review-->
+  
+  <form action="/add" method="POST">
+    <label for="title">Title</label>
+    <input type="text" name="title" id="title" required>
+
+    <!-- Add fields for author, ISBN, rating, date read, and notes -->
+
+    <label for="author">Author</label>
+    <input type="text" name="author" id="author" required>
+
+    <label for="isbn">ISBN</label>
+    <input type="text" name="isbn" id="isbn">
+
+    <label for="rating">Rating (1-10)</label>
+    <input type="number" name="rating" id="rating" min="1" max="10">
+
+    <label for="date_read">Date Read</label>
+    <input type="date" name="date_read" id="date_read">
+
+    <label for="notes">Notes</label>
+    <textarea name="notes" id="notes"></textarea>
+
+    <!-- Add a submit button to the form -->
+    <button type="submit">Add Book</button>
+  </form>
+
+  <hr>
+
+
+  <!-- Add sorting links for rating and recency -->
+  <div class="sort-links">
+  <a href="/?sort=rating">Sort by Rating</a> |
+  <a href="/?sort=recency">Sort by Recency</a> |
+  <a href="/">Default</a>
+</div>
+  <!-- Display Books -->
+<div class="book-list">
+  <% books.forEach(function(book) { %>
+    <div class="book-card" id="display-<%= book.book_id %>">
+      
+      <!-- Display the book cover using the ISBN -->
+      <img src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" alt="Cover of <%= book.title %>">
+      <h2><%= book.title %> — by <%= book.author %></h2>
+      <p>Rating: <%= book.rating %>/10</p>
+
+      <!-- Display the date read in a more readable format -->
+      <p>Date read: <%= book.date_read.toLocaleDateString() %></p>
+      <p><%= book.notes %></p>
+
+
+      <!-- Add Edit and Delete buttons for each book -->
+      <button onclick="toggleEdit('<%= book.book_id %>')">Edit</button>
+
+      <form action="/delete/<%= book.book_id %>" method="POST" style="display:inline;">
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+
+    <div class="edit-form" id="edit-<%= book.book_id %>" style="display:none;">
+      <form action="/edit" method="POST">
+        <input type="hidden" name="book_id" value="<%= book.book_id %>">
+
+        <label>Title</label>
+        <input type="text" name="title" value="<%= book.title %>" required>
+
+        <label>Author</label>
+        <input type="text" name="author" value="<%= book.author %>" required>
+
+        <label>ISBN</label>
+        <input type="text" name="isbn" value="<%= book.isbn %>">
+
+        <label>Rating</label>
+        <input type="number" name="rating" value="<%= book.rating %>" min="1" max="10">
+
+        <label>Date Read</label>
+        <input type="date" name="date_read" value="<%= book.date_read.toISOString().split('T')[0] %>">
+
+        <label>Notes</label>
+        <textarea name="notes"><%= book.notes %></textarea>
+
+        <button type="submit">Save</button>
+        <button type="button" onclick="toggleEdit('<%= book.book_id %>')">Cancel</button>
+      </form>
+    </div>
+  <% }); %>
+</div>
+
+<!-- Add a script to toggle the edit form visibility -->
+<script>
+  function toggleEdit(id) {
+    const display = document.getElementById("display-" + id);
+    const editForm = document.getElementById("edit-" + id);
+
+    if (editForm.style.display === "none") {
+      display.style.display = "none";
+      editForm.style.display = "block";
+    } else {
+      display.style.display = "block";
+      editForm.style.display = "none";
+    }
+  }
+</script>
+</body>
+</html>
